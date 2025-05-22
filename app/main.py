@@ -60,7 +60,18 @@ if query:
                         st.markdown(f"- 문서 {i}: `{source_name}` (⚠️ 파일 없음)")
 
             st.markdown(f"`{result['section']}`")
+            st.markdown("### 📚 참고된 문서 청크")
+            if not result["source_documents"]:
+                st.info("관련 문서 청크가 없습니다.")
+            else:
+                for i, doc in enumerate(result["source_documents"], 1):
+                    doc_title = doc.metadata.get("document", "제목 없음")
+                    section = doc.metadata.get("section", "섹션 정보 없음")
+                    full_text = doc.page_content.strip()
 
+                    with st.expander(f"{i}. {doc_title} — 섹션: {section}"):
+                        st.markdown(full_text)
+                        
         with right_col:
             st.markdown("### 📷 관련 이미지")
 
@@ -74,8 +85,9 @@ if query:
                     if i + j < len(image_paths):
                         path = image_paths[i + j]
                         name = image_names[i + j]
-                        display_name = name.rsplit("_page", 1)[0]  # _page0_img1 제거
-                        if Path(path).exists():
+                        display_name = name.rsplit("_page", 1)[0]  # _page0_img 제거
+
+                        if path and Path(path).exists():  # ✅ 여기 수정
                             cols[j].image(
                                 path,
                                 caption=display_name,
