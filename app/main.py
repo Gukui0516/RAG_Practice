@@ -5,8 +5,8 @@ import os
 import re
 
 # ✅ 설정
-st.set_page_config(page_title="EV6 정비 어시스턴트", layout="wide")
-st.title("🔧 EV6 정비 문서 기반 Q&A")
+st.set_page_config(page_title="전기차 정비 Q&A 어시스턴트", layout="wide")
+st.title("🔧 전기차 정비 Q&A 어시스턴트")
 
 # ✅ 헬퍼 함수
 
@@ -22,7 +22,7 @@ def clean_image_name(name: str) -> str:
 
 
 # ✅ 입력창
-query = st.text_input("🧠 질문을 입력하세요:", placeholder="예: 기능통합형 드라이브 액슬 탈거 방법 알려줘")
+query = st.text_input("질문을 입력하세요:", placeholder="예: 기능통합형 드라이브 액슬 탈거 방법 알려줘")
 
 # ✅ 질문 처리
 if query:
@@ -33,7 +33,7 @@ if query:
         left_col, right_col = st.columns([2, 1])
 
         with left_col:
-            st.markdown("### 🧠 정비사 답변")
+            st.markdown("### 🔧 정비사 답변")
 
             # [정비사 답변] 제거
             cleaned_answer = result["result"].removeprefix("[정비사 답변]").strip()
@@ -51,7 +51,7 @@ if query:
                     if file_path.exists():
                         with open(file_path, "rb") as f:
                             st.download_button(
-                                label=f"📥 문서 {i}: {source_name}",
+                                label=f"문서 {i}: {source_name}",
                                 data=f.read(),
                                 file_name=Path(source_rel).name,
                                 mime="application/pdf"
@@ -59,17 +59,25 @@ if query:
                     else:
                         st.markdown(f"- 문서 {i}: `{source_name}` (⚠️ 파일 없음)")
 
-            st.markdown(f"🔍 예측된 섹션: `{result['section']}`")
+            st.markdown(f"`{result['section']}`")
 
         with right_col:
             st.markdown("### 📷 관련 이미지")
-            for path, name in zip(result.get("image_paths", []), result.get("image_names", [])):
-                if path and Path(path).exists():
-                    # 이미지 이름에서 "_page0_img1.png" 같은 접미어 제거
-                    display_name = name.rsplit("_page", 1)[0]
-                    st.image(
-                        path,
-                        caption=display_name,
-                        use_container_width=True,
-                        output_format="auto"
-                    )
+
+            image_paths = result.get("image_paths", [])
+            image_names = result.get("image_names", [])
+
+            # 이미지 두 개씩 나눠서 두 열로 출력
+            for i in range(0, len(image_paths), 2):
+                cols = st.columns(2)
+                for j in range(2):
+                    if i + j < len(image_paths):
+                        path = image_paths[i + j]
+                        name = image_names[i + j]
+                        display_name = name.rsplit("_page", 1)[0]  # _page0_img1 제거
+                        if Path(path).exists():
+                            cols[j].image(
+                                path,
+                                caption=display_name,
+                                use_container_width=True
+                            )
