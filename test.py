@@ -33,7 +33,14 @@ for metadata in collection["metadatas"]:
     if section:
         sections.add(section)
 
-# 출력
-print("✅ 저장된 섹션 목록:")
-for s in sorted(sections):
-    print("-", s)
+# 저장된 문서 중 하나를 예시로 출력
+docs = vectordb.similarity_search("test", k=1)
+if docs:
+    doc = docs[0]
+    print("✅ 예시 문서 내용:")
+    print(doc.page_content)
+    print("\n✅ 메타데이터:")
+    for key, value in doc.metadata.items():
+        print(f"{key}: {value}")
+else:
+    print("❌ 관련 문서를 찾을 수 없습니다.")

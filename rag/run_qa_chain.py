@@ -94,8 +94,6 @@ section_chain = LLMChain(llm=local_llm, prompt=section_prompt)
 document_chain = LLMChain(llm=local_llm, prompt=document_prompt)
 
 # ✅ 커스텀 QA 실행 함수
-
-
 def run_custom_qa(query: str):
     # 1. 섹션 추론
     section = section_chain.run({"question": query}).strip()

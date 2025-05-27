@@ -1,3 +1,8 @@
+# PDF 문서에서 텍스트와 이미지를 추출하여 구조화된 JSON 파일로 저장
+# 1.	📄 PDF 문서를 탐색하여 모든 페이지의 텍스트와 이미지를 추출하고, 경로 정보를 바탕으로 섹션/문서명을 구분합니다.
+# 2.	🧹 텍스트는 날짜·링크·제어문자 등을 제거해 정제하고, 이미지 파일은 페이지별로 PNG 형식으로 저장합니다.
+# 3.	🗂 정제된 텍스트, 이미지 경로, 원본 경로, 섹션명, 문서명을 포함한 JSON 데이터를 생성해 하나의 파일로 저장합니다.
+
 import os
 import fitz  # PyMuPDF
 import json
@@ -10,7 +15,6 @@ from typing import List, Dict
 def extract_from_pdf(pdf_path: str, output_image_dir: str) -> List[Dict]:
     Path(output_image_dir).mkdir(parents=True, exist_ok=True)
     doc = fitz.open(pdf_path)
-
     # ✅ 상대 경로 및 섹션, 문서 이름 추출 (NFC 정규화)
     relative_path = os.path.relpath(pdf_path)
     parts = [unicodedata.normalize("NFC", p)

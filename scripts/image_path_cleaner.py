@@ -1,3 +1,4 @@
+#청크파일에서 존재하지 않는 이미지 경로를 제거
 import os
 import json
 
