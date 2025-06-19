@@ -1,7 +1,10 @@
 import streamlit as st
 from pathlib import Path
 from rag.run_qa_chain import run_custom_qa
+import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import re
 
 # ✅ 설정

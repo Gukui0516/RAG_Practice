@@ -3,7 +3,10 @@
 # 2.	🧹 텍스트는 날짜·링크·제어문자 등을 제거해 정제하고, 이미지 파일은 페이지별로 PNG 형식으로 저장합니다.
 # 3.	🗂 정제된 텍스트, 이미지 경로, 원본 경로, 섹션명, 문서명을 포함한 JSON 데이터를 생성해 하나의 파일로 저장합니다.
 
+import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import fitz  # PyMuPDF
 import json
 import re

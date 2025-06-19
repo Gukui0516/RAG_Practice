@@ -1,5 +1,8 @@
 #청크파일에서 존재하지 않는 이미지 경로를 제거
+import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import json
 
 # 파일 경로
